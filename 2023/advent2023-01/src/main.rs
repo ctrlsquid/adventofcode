@@ -59,7 +59,13 @@ fn get_first_number(string: &str, to_reverse: bool) -> Option<i32> {
         }
         // If not, then store the character in our string and check the entire string
         partial_string.push(c);
-        if let Some(num) = get_number_from_string(&partial_string) {
+        // If the checked string is reversed, then we need to reverse the partial string
+        let to_check = if to_reverse {
+            partial_string.chars().rev().collect::<String>()
+        } else {
+            partial_string.to_string()
+        };
+        if let Some(num) = get_number_from_string(&to_check) {
             return Some(num);
         }
     }
