@@ -103,3 +103,13 @@ fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
 }
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn get_first_number() {
+        let input = "onesevenseven5fourlrkkqtfkrmdlsmd";
+        assert_eq!(super::get_first_number(input, false), Some(1));
+        assert_eq!(super::get_first_number(input, true), Some(4));
+    }
+}
