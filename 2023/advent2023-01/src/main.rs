@@ -97,6 +97,7 @@ fn get_number_from_string(string: &str) -> Option<i32> {
     None
 }
 
+// Reads a file line by line
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
     where P: AsRef<Path>, {
     let file = File::open(filename)?;
