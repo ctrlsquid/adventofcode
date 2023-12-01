@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "advent2023-*"
+]
+
+resolver = "2"
