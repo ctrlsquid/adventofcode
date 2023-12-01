@@ -112,4 +112,9 @@ mod tests {
         assert_eq!(super::get_first_number(input, false), Some(1));
         assert_eq!(super::get_first_number(input, true), Some(4));
     }
+    #[test]
+    fn get_number_from_string() {
+        let input = "sixfobfzvdthre";
+        assert_eq!(super::get_number_from_string(input), Some(6));
+    }
 }
