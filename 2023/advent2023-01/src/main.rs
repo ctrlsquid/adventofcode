@@ -59,7 +59,13 @@ fn get_first_number(string: &str, to_reverse: bool) -> Option<i32> {
         }
         // If not, then store the character in our string and check the entire string
         partial_string.push(c);
-        if let Some(num) = get_number_from_string(&partial_string) {
+        // If the checked string is reversed, then we need to reverse the partial string
+        let to_check = if to_reverse {
+            partial_string.chars().rev().collect::<String>()
+        } else {
+            partial_string.to_string()
+        };
+        if let Some(num) = get_number_from_string(&to_check) {
             return Some(num);
         }
     }
@@ -91,8 +97,24 @@ fn get_number_from_string(string: &str) -> Option<i32> {
     None
 }
 
+// Reads a file line by line
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
     where P: AsRef<Path>, {
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn get_first_number() {
+        let input = "onesevenseven5fourlrkkqtfkrmdlsmd";
+        assert_eq!(super::get_first_number(input, false), Some(1));
+        assert_eq!(super::get_first_number(input, true), Some(4));
+    }
+    #[test]
+    fn get_number_from_string() {
+        let input = "sixfobfzvdthre";
+        assert_eq!(super::get_number_from_string(input), Some(6));
+    }
 }
