@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
@@ -17,81 +16,19 @@ const VALID_NUMBERS: [(&str, i32); 9] = [
 
 fn main() {
     let filepath = std::env::args().nth(1).expect("No file provided");
-    // Separate each line into a vector
     if let Ok(lines) = read_lines(filepath) {
-        // Create a vector to store the numbers, so we can sum them later
+        // Create a vector of numbers, containing the calculated numbers for each line
         let mut numbers: Vec<i32> = Vec::new();
         // Loop through each line to parse the numbers
         for line in lines {
             if let Ok(string) = line {
-                // Loop through each character in the string until a number is found
-                let mut first: Option<i32> = None;
-                let mut first_string = String::new();
-                for (i, c) in string.chars().enumerate() {
-                    // If the character is a number, break the loop and store the character
-                    if c.is_numeric() {
-                        // Convert the character to a number
-                        first = Some(c.to_digit(10).unwrap() as i32);
-                        break;
-                    }
-                    // If not, push the character to our string and check if it's in our VALID_NUMBERS array
-                    else {
-                        first_string.push(c);
-                        // Check if any of the VALID_NUMBERS are in the string
-                        // Make sure the string is at least 3 characters long, as we don't want to match "a"
-                        if first_string.len() >= 3 {
-                            // Loop through each VALID_NUMBER, and check if it's in the string
-                            let mut found_number: Option<i32> = None;
-                            for num in VALID_NUMBERS.iter() {
-                                // Check if the string contains the number
-                                if first_string.contains(num.0) {
-                                    found_number = Some(num.1);
-                                    break;
-                                }
-                            }
-                            // If a number was found, break the loop
-                            if found_number.is_some() {
-                                first = found_number;
-                                break;
-                            }
-                        }
-                    }
-                }
-                // Reverse loop through each character in the string until a number is found
-                let mut last: Option<char> = None;
-                let mut last_string = String::new();
-                for (i, c) in string.chars().rev().enumerate() {
-                    // If the character is a number, break the loop
-                    if c.is_numeric() {
-                        last = Some(c);
-                        break;
-                    }
-                    // If not, push the character to our string and check if it's in our VALID_NUMBERS array
-                    // NOTE: The string will be reversed, so we need to reverse it back
-                    else {
-                        last_string.push(c);
-                        // Check if any of the VALID_NUMBERS are in the string
-                        // Make sure the string is at least 3 characters long, as we don't want to match "a"
-                        if last_string.len() >= 3 {
-                            // Loop through each VALID_NUMBER, and check if it's in the string
-                            let mut found_number: Option<char> = None;
-                            for num in VALID_NUMBERS.iter() {
-                                // Check if the string contains the number
-                                if last_string.contains(num.0) {
-                                    found_number = Some(num.1.to_string().chars().next().unwrap());
-                                    break;
-                                }
-                            }
-                            // If a number was found, break the loop
-                            if found_number.is_some() {
-                                last = found_number;
-                                break;
-                            }
-                        }
-                    }
-                }
+                // First, find the first number in the string
+                // This is done by looping through the string forwards
+                let first = get_first_number(&string, false).expect("No first number found");
+                // Then, find the last number in the string
+                let last = get_first_number(&string, true).expect("No last number found");
                 // Combine the two strings, which should be numbers into a two-digit number
-                let number = format!("{}{}", first.unwrap(), last.unwrap()).parse::<i32>().unwrap();
+                let number = format!("{}{}", first, last).parse::<i32>().unwrap();
                 numbers.push(number);
             }
         }
@@ -99,6 +36,59 @@ fn main() {
         let sum = numbers.iter().sum::<i32>();
         println!("Sum: {}", sum);
     }
+}
+
+// Gets the first number in a string
+fn get_first_number(string: &str, to_reverse: bool) -> Option<i32> {
+    // A partial string for storing each character if it isn't a number
+    let mut partial_string = String::new();
+    // The string to loop through, either the original string or the reversed string
+    let checked_string = if to_reverse {
+        string.chars().rev().collect::<String>()
+    } else {
+        string.to_string()
+    };
+    // Loop through each character in the string
+    // If it's a number, return it
+    // If it isn't, store it in the partial string and check that partial string for a number
+    for (_i, c) in checked_string.chars().enumerate() {
+        // First, check if the singular character is a number
+        // If it is, break the loop and store the character
+        if let Some(num) = get_number_from_string(&c.to_string()) {
+            return Some(num);
+        }
+        // If not, then store the character in our string and check the entire string
+        partial_string.push(c);
+        if let Some(num) = get_number_from_string(&partial_string) {
+            return Some(num);
+        }
+    }
+    // If no number is found, return None
+    None
+}
+
+// Checks a given string for a number, either by character or by "word", and returns it if found
+fn get_number_from_string(string: &str) -> Option<i32> {
+    // If the string's length is 1, check if that character is a number
+    if string.len() == 1 {
+        // If the character is a number, convert it to a number and return it
+        if string.chars().nth(0).unwrap().is_numeric() {
+            return Some(string.chars().nth(0).unwrap().to_digit(10).unwrap() as i32);
+        }
+    }
+    // If the string isn't at least 3 characters long, return None
+    if string.len() < 3 {
+        return None;
+    }
+    // Lastly, if the string is at least 3 characters long, check if it contains any of the VALID_NUMBERS
+    for num in VALID_NUMBERS.iter() {
+        // Check if the string contains the number
+        if string.contains(num.0) {
+            return Some(num.1)
+        }
+    }
+    // If no number is found, return None
+    None
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
