@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "advent2023-*"
+    "2023/challenge-*"
 ]
 
 resolver = "2"
