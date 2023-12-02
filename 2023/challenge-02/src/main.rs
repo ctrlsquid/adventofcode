@@ -34,7 +34,7 @@ impl From<String> for Game {
         // First, we split the string be a colon to get the ID and the colors
         let mut split = string.split(": ");
         // Get the ID
-        let id = split.next().unwrap().split(" ").nth(1).unwrap().parse::<i32>().unwrap();
+        let id = split.next().unwrap().split(' ').nth(1).unwrap().parse::<i32>().unwrap();
         // Store the colors in a vector
         let all_colors = split.next().unwrap();
         // Split the colors into groups by semicolons
@@ -48,7 +48,7 @@ impl From<String> for Game {
             let colors = group.split(", ");
             // Iterate over each color and store the largest value
             for color in colors {
-                let mut split = color.split(" ");
+                let mut split = color.split(' ');
                 let number = split.next().unwrap().parse::<i32>().unwrap();
                 let color = split.next().unwrap();
                 match color {
