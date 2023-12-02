@@ -5,3 +5,14 @@ version = 3
 [[package]]
 name = "challenge-01"
 version = "0.1.0"
+dependencies = [
+ "shared",
+]
+
+[[package]]
+name = "challenge-02"
+version = "0.1.0"
+
+[[package]]
+name = "shared"
+version = "0.1.0"
