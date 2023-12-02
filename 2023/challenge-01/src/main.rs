@@ -1,6 +1,5 @@
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
+use std::io::{BufRead};
+use shared::read_lines;
 
 const VALID_NUMBERS: [(&str, i32); 9] = [
     ("one", 1),
@@ -95,13 +94,6 @@ fn get_number_from_string(string: &str) -> Option<i32> {
     }
     // If no number is found, return None
     None
-}
-
-// Reads a file line by line
-fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-    where P: AsRef<Path>, {
-    let file = File::open(filename)?;
-    Ok(io::BufReader::new(file).lines())
 }
 
 #[cfg(test)]
