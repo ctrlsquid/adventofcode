@@ -7,12 +7,24 @@ fn main() {
         let max_red_allowed = 12;
         let max_green_allowed = 13;
         let max_blue_allowed = 14;
-        let filtered_games: Vec<Game> = games.into_iter().filter(|game| {
-            game.max_red <= max_red_allowed && game.max_green <= max_green_allowed && game.max_blue <= max_blue_allowed
-        }).collect();
-        // Sum the IDs of the filtered games
-        let sum: i32 = filtered_games.iter().map(|game| game.id).sum();
-        println!("Sum of valid game IDs: {}", sum);
+        // Get all games that don't have a larger value than the maximum allowed and sum their IDs
+        let sum_ids_filtered_max: i32 = games
+            .iter()
+            .clone()
+            .filter(|game| {
+                game.min_red <= max_red_allowed &&
+                game.min_green <= max_green_allowed &&
+                game.min_blue <= max_blue_allowed
+            })
+            .map(|game| game.id)
+            .sum();
+        println!("Sum of valid game IDs: {}", sum_ids_filtered_max);
+        // Get all games again, but multiply the minimum values instead of summing the IDs
+        let product_min_values: i32 = games
+            .iter()
+            .map(|game| game.min_red * game.min_green * game.min_blue)
+            .sum();
+        println!("Product of minimum values: {}", product_min_values);
     } else {
         println!("Error reading file");
     }
@@ -21,9 +33,9 @@ fn main() {
 #[derive(Debug)]
 struct Game {
     id: i32,
-    max_red: i32,
-    max_green: i32,
-    max_blue: i32,
+    min_red: i32,
+    min_green: i32,
+    min_blue: i32,
 }
 
 impl From<String> for Game {
@@ -56,17 +68,17 @@ impl From<String> for Game {
                         if number > max_red {
                             max_red = number;
                         }
-                    },
+                    }
                     "green" => {
                         if number > max_green {
                             max_green = number;
                         }
-                    },
+                    }
                     "blue" => {
                         if number > max_blue {
                             max_blue = number;
                         }
-                    },
+                    }
                     _ => panic!("Invalid color: {}", color),
                 }
             }
@@ -74,9 +86,9 @@ impl From<String> for Game {
 
         Game {
             id,
-            max_red,
-            max_green,
-            max_blue,
+            min_red: max_red,
+            min_green: max_green,
+            min_blue: max_blue,
         }
     }
 }
