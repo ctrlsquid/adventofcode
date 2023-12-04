@@ -7,7 +7,7 @@ fn main() {
         let max_red_allowed = 12;
         let max_green_allowed = 13;
         let max_blue_allowed = 14;
-        // Get all games that don't have a larger value than the maximum allowed and sum their IDs
+        // PART 1 - Get all games that don't have a larger value than the maximum allowed and sum their IDs
         let sum_ids_filtered_max: i32 = games
             .iter()
             .clone()
@@ -19,7 +19,7 @@ fn main() {
             .map(|game| game.id)
             .sum();
         println!("Sum of valid game IDs: {}", sum_ids_filtered_max);
-        // Get all games again, but multiply the minimum values instead of summing the IDs
+        // PART 2 - Get all games again, but multiply the minimum values instead of summing the IDs
         let product_min_values: i32 = games
             .iter()
             .map(|game| game.min_red * game.min_green * game.min_blue)
