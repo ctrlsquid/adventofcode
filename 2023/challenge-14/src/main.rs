@@ -36,6 +36,7 @@ fn get_rock_from_line(index: usize, line: &str) -> Rock {
 }
 
 // Calculates the load for a given line by counting the round rocks and multiplying by the multiplier
+// The multiplier is expected to be the distance between the current line index and the last line index
 fn calculate_load_for_line(line: &str, multiplier: usize) -> usize {
     // Count all the round rocks in the line
     let mut round_rocks = 0;
