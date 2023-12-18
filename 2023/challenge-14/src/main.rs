@@ -1,6 +1,12 @@
 fn main() {
-    // TODO: Read in input
-    // TODO: Store all lines in single array
+    // First read in our input, which should look similar to this:
+    // O..#.#..O
+    // .O#.#O#.#
+    // .#O..#OO.
+    let lines: Vec<String> = shared::read_lines("./input.txt")
+        .expect("Failed to read input").map(
+            |line| line.expect("Failed to read line")
+        ).collect();
     // TODO: For each string in array, check if its a
     //  - O for a round rock
     //  - # for a square rock
@@ -27,4 +33,17 @@ fn get_rock_from_line(index: usize, line: &str) -> Rock {
         '.' => Rock::EmptySpace,
         _ => panic!("Unexpected character: {}", character)
     }
+}
+
+// Calculates the load for a given line by counting the round rocks and multiplying by the multiplier
+fn calculate_load_for_line(line: &str, multiplier: usize) -> usize {
+    // Count all the round rocks in the line
+    let mut round_rocks = 0;
+    for character in line.chars() {
+        if character == 'O' {
+            round_rocks += 1;
+        }
+    }
+    // Multiply the round rocks by the multiplier
+    round_rocks * multiplier
 }
