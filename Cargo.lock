@@ -18,6 +18,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "challenge-14"
+version = "0.1.0"
+dependencies = [
+ "shared",
+]
+
+[[package]]
 name = "log"
 version = "0.4.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
