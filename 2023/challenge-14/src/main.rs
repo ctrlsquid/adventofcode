@@ -11,3 +11,20 @@ fn main() {
     // After all O's have been moved, check the distance from each O in a line to the last index and sum for the total distance (load)
     // At the end, sum all loads to get the total load
 }
+
+enum Rock {
+    RoundRock,
+    SquareRock,
+    EmptySpace
+}
+
+// Gets the rock from the line at the given index
+fn get_rock_from_line(index: usize, line: &str) -> Rock {
+    let character = line.chars().nth(index).unwrap();
+    match character {
+        'O' => Rock::RoundRock,
+        '#' => Rock::SquareRock,
+        '.' => Rock::EmptySpace,
+        _ => panic!("Unexpected character: {}", character)
+    }
+}
